@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue("CC")
 
 public class CurrentAccount extends BankAccount{
-    private double interestRate;
+    private double overDraft;
 }

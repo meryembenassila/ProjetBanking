@@ -8,10 +8,11 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 import java.util.List;
 
+import static jakarta.persistence.InheritanceType.SINGLE_TABLE;
 import static jakarta.persistence.InheritanceType.TABLE_PER_CLASS;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = SINGLE_TABLE)
 @DiscriminatorColumn(name = "TYPE",length = 4)
 @AllArgsConstructor
 @NoArgsConstructor
