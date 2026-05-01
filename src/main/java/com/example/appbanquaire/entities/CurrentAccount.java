@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@DiscriminatorValue("CC")
 
 public class CurrentAccount extends BankAccount{
     private double interestRate;
