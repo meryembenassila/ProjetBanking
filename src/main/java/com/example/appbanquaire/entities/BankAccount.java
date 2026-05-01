@@ -28,7 +28,7 @@ public abstract class  BankAccount {//pour ne pas etre instancier
     private String currency;
     @ManyToOne
     private Customer customer;
-    @OneToMany(mappedBy = "bankAccount")
+    @OneToMany(mappedBy = "bankAccount",fetch = FetchType.EAGER)
     private List<AccountOperation> operations;
 
 

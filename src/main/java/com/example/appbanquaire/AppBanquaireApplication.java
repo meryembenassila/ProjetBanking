@@ -59,6 +59,31 @@ public class AppBanquaireApplication {
 
                 }
 
+                BankAccount bankAccount = banAccountRepository.findById(1L).get();
+                System.out.println("*****************************");
+                System.out.println(bankAccount.getCreatedAt());
+                System.out.println(bankAccount.getBalance());
+                System.out.println(bankAccount.getStatus());
+                System.out.println(bankAccount.getCustomer().getName());
+                //afficher type de compte
+                System.out.println(bankAccount.getClass().getSimpleName());
+                if(bankAccount instanceof CurrentAccount){
+                    System.out.println("CurrentAccount :"+((CurrentAccount) bankAccount).getOverDraft());
+                }else{
+                    System.out.println("SavingAccount :"+((SavingAccount) bankAccount).getInterestRate());
+                }
+                bankAccount.getOperations().forEach(accountOperation -> {
+                    System.out.println(accountOperation.getType());
+                    System.out.println(accountOperation.getDate());
+                    System.out.println(accountOperation.getAmount());
+
+                });
+
+
+
+
+
+
 
 
             });
