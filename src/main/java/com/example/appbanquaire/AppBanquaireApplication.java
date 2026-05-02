@@ -1,9 +1,13 @@
 package com.example.appbanquaire;
 
+import com.example.appbanquaire.dtaos.CurrentAccountDto;
+import com.example.appbanquaire.dtaos.CustomerDTO;
+import com.example.appbanquaire.dtaos.SavingAccountDto;
 import com.example.appbanquaire.entities.*;
 import com.example.appbanquaire.exceptions.BalanceNotSuffisanceException;
 import com.example.appbanquaire.exceptions.BankAccountNotFoundException;
 import com.example.appbanquaire.exceptions.CustomerNotFoundException;
+import com.example.appbanquaire.mappers.BankAccountMapperIMpl;
 import com.example.appbanquaire.repositories.AccountOperationRepository;
 import com.example.appbanquaire.repositories.BanAccountRepository;
 import com.example.appbanquaire.repositories.CustomerRepository;
@@ -90,7 +94,7 @@ public class AppBanquaireApplication {
     }
 
     @Bean
-    CommandLineRunner start(BankAccountService bankAccountService) {
+    CommandLineRunner start(BankAccountService bankAccountService, BankAccountMapperIMpl bankAccountMapperIMpl) {
         return args -> {
             Stream<String> noms = Stream.of("Hassan", "Yassine", "Aicha");
             noms.forEach(name-> {
@@ -98,7 +102,8 @@ public class AppBanquaireApplication {
                 Customer customer = new Customer();
                 customer.setName(name);
                 customer.setEmail(name+"@gmail.com");
-                bankAccountService.saveCustommer(customer);
+                CustomerDTO customerDTO = bankAccountMapperIMpl.fromCustomer(customer);
+                bankAccountService.saveCustommer(customerDTO);
             });
 
                 bankAccountService.getCustomers().forEach(customer1 -> {
@@ -114,9 +119,16 @@ public class AppBanquaireApplication {
 
 
                 });
-            bankAccountService.gettAccounts().forEach(bankAccount -> {
+            bankAccountService.gettAccounts().forEach(bankAccountDto -> {
+                BankAccount bankAccount ;
+                if(bankAccountDto instanceof SavingAccountDto){
+                    bankAccount= bankAccountMapperIMpl.fromSavingAccountDto((SavingAccountDto) bankAccountDto);
+                }else{
+                    bankAccount= bankAccountMapperIMpl.fromCurrentAccountDto((CurrentAccountDto) bankAccountDto);
+
+                }
                 for (int i = 0 ; i<10 ; i++){
-                    System.out.println("cc");
+
                     try {
 
                         bankAccountService.credit(bankAccount.getId(),Math.random()*100,"Credit");
