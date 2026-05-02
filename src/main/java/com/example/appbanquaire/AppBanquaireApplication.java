@@ -1,9 +1,13 @@
 package com.example.appbanquaire;
 
 import com.example.appbanquaire.entities.*;
+import com.example.appbanquaire.exceptions.BalanceNotSuffisanceException;
+import com.example.appbanquaire.exceptions.BankAccountNotFoundException;
+import com.example.appbanquaire.exceptions.CustomerNotFoundException;
 import com.example.appbanquaire.repositories.AccountOperationRepository;
 import com.example.appbanquaire.repositories.BanAccountRepository;
 import com.example.appbanquaire.repositories.CustomerRepository;
+import com.example.appbanquaire.services.BankAccountService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,7 +24,7 @@ public class AppBanquaireApplication {
 
     }
 
-    @Bean
+    //@Bean
     CommandLineRunner start(CustomerRepository customerRepository,
                             BanAccountRepository banAccountRepository,
                             AccountOperationRepository accountOperationRepository){
@@ -79,17 +83,58 @@ public class AppBanquaireApplication {
 
                 });
 
-
-
-
-
-
-
-
             });
 
 
         };
     }
 
-}
+    @Bean
+    CommandLineRunner start(BankAccountService bankAccountService) {
+        return args -> {
+            Stream<String> noms = Stream.of("Hassan", "Yassine", "Aicha");
+            noms.forEach(name-> {
+
+                Customer customer = new Customer();
+                customer.setName(name);
+                customer.setEmail(name+"@gmail.com");
+                bankAccountService.saveCustommer(customer);
+            });
+
+                bankAccountService.getCustomers().forEach(customer1 -> {
+
+                    try {
+                        bankAccountService.savecurrentaccount(Math.random()*1200,Math.random()*200,customer1.getId());
+                        bankAccountService.savesavingaccount(Math.random()*1200,Math.random()*200,customer1.getId());
+                    } catch (CustomerNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+
+                });
+            bankAccountService.gettAccounts().forEach(bankAccount -> {
+                for (int i = 0 ; i<10 ; i++){
+                    System.out.println("cc");
+                    try {
+
+                        bankAccountService.credit(bankAccount.getId(),Math.random()*100,"Credit");
+                        bankAccountService.debit(bankAccount.getId(),Math.random()*100,"Debit");
+                    } catch (BankAccountNotFoundException|BalanceNotSuffisanceException e) {
+                        e.printStackTrace();
+
+                    }
+
+
+                }
+
+            });
+
+
+    };}                }
+
+
+
+
+
