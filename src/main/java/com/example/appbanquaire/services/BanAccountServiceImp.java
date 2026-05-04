@@ -73,6 +73,17 @@ public class BanAccountServiceImp implements BankAccountService{
 
     }
 
+    @Override
+    public List<CustomerDTO> search(String motif){
+        List<CustomerDTO> customerDTOS = new ArrayList<>();
+        for (Customer customer : customerRepository.search(motif)) {
+            customerDTOS.add(bankAccountMapperIMpl.fromCustomer(customer));
+        }
+        return customerDTOS;
+
+
+    }
+
 /// ///////////////////////////Gestion des Comptes///////////////////////////
     @Override
     public CurrentAccountDto savecurrentaccount(double initbalance, double overDraft, Long customerId) throws CustomerNotFoundException {
@@ -122,6 +133,7 @@ public class BanAccountServiceImp implements BankAccountService{
     public BankAccountDto getAccount(Long accountId) throws BankAccountNotFoundException {
         BankAccount bankAccount = banAccountRepository.findById(accountId).orElse(null);
         if(bankAccount == null) throw new BankAccountNotFoundException("Account Not Found");
+
         if(bankAccount instanceof SavingAccount){
            return bankAccountMapperIMpl.fromSavingAccount((SavingAccount) bankAccount);
         }else{
@@ -199,6 +211,8 @@ public class BanAccountServiceImp implements BankAccountService{
         return accountOperationDtos;
 
     }
+
+
 
     @Override
     public AccountHistoryDto getAccountHistory(Long accountId, int page, int size) throws BankAccountNotFoundException {

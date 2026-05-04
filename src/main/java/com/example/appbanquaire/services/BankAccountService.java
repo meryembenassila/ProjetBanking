@@ -19,6 +19,8 @@ public interface BankAccountService {
 
     void deleteCustomer(Long customerId);
 
+    List<CustomerDTO> search(String motif);
+
     CurrentAccountDto savecurrentaccount(double initbalance, double overDraft, Long customerId) throws CustomerNotFoundException;
     SavingAccountDto savesavingaccount(double initbalance, double interestRate, Long customerId) throws CustomerNotFoundException;
     BankAccountDto getAccount(Long accountId) throws BankAccountNotFoundException;

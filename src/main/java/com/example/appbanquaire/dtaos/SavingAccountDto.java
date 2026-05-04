@@ -9,14 +9,14 @@ import java.util.Date;
 
 @Data
 
-public  class SavingAccountDto extends BankAccountDto{ //!!!!!!!!attention abstract
+public  class SavingAccountDto extends BankAccountDto{
 
     private Long id ;
     private Date createdAt;
     private double balance;
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
-   private CustomerDTO customerDTO; //on peut avoir juste le nom un string c'est selon l'utilsation dans la partie web
+    private CustomerDTO customerDTO; //on peut avoir juste le nom un string c'est selon l'utilsation dans la partie web
     private double interestRate;
 
 

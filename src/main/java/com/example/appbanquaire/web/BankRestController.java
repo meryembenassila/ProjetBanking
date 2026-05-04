@@ -3,19 +3,24 @@ package com.example.appbanquaire.web;
 
 import com.example.appbanquaire.dtaos.*;
 import com.example.appbanquaire.entities.BankAccount;
+import com.example.appbanquaire.exceptions.BalanceNotSuffisanceException;
 import com.example.appbanquaire.exceptions.BankAccountNotFoundException;
 import com.example.appbanquaire.exceptions.CustomerNotFoundException;
 import com.example.appbanquaire.mappers.BankAccountMapperIMpl;
 import com.example.appbanquaire.services.BankAccountService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @AllArgsConstructor
+@CrossOrigin("*")
 public class BankRestController {
     private BankAccountService bankAccountService;
+
 
 
     @GetMapping("/Accounts")
@@ -60,14 +65,20 @@ public class BankRestController {
 
 
     @PostMapping("/Account/{accountId}/debiter")
-    public void debiter(@PathVariable Long accountId,@RequestBody OperationRequestDto operationRequestDto) throws BankAccountNotFoundException {
-        bankAccountService.credit(accountId,operationRequestDto.getAmount(),operationRequestDto.getDescription());
+    public void debiter(@PathVariable Long accountId,@RequestBody AccountOperationDto accountOperationDto) throws BankAccountNotFoundException, BalanceNotSuffisanceException {
+        bankAccountService.debit(accountId,accountOperationDto.getAmount(),accountOperationDto.getDescription());
 
     }
 
     @PostMapping("/Account/{accountId}/crediter")
-    public void crediter(@PathVariable Long accountId,@RequestBody OperationRequestDto operationRequestDto) throws BankAccountNotFoundException {
-        bankAccountService.credit(accountId,operationRequestDto.getAmount(),operationRequestDto.getDescription());
+    public void crediter(@PathVariable Long accountId,@RequestBody AccountOperationDto accountOperationDto) throws BankAccountNotFoundException {
+        bankAccountService.credit(accountId,accountOperationDto.getAmount(),accountOperationDto.getDescription());
+
+    }
+
+    @PostMapping("/Account/transfert")
+    public void transfert(@RequestBody Virement virement) throws BankAccountNotFoundException, BalanceNotSuffisanceException {
+        bankAccountService.transfert(virement.getAccountSource(), virement.getAccountDestination(), virement.getAmount());
 
     }
 

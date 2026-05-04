@@ -34,15 +34,15 @@ public class BankAccountMapperIMpl {
     public SavingAccount fromSavingAccountDto(SavingAccountDto savingAccountDto){
         SavingAccount savingAccount = new SavingAccount();
         BeanUtils.copyProperties(savingAccountDto,savingAccount);
-        savingAccount.setCustomer(fromCustomerDTO(savingAccountDto.getCustomerDTO()));
+        savingAccount.setCustomer(fromCustomerDTO(savingAccountDto.getCustomerDTO()));//!!!!!!!!!!!!!!!!
         return  savingAccount;
     }
 
     public SavingAccountDto fromSavingAccount (SavingAccount savingAccount){
         SavingAccountDto savingAccountDto = new SavingAccountDto();
         BeanUtils.copyProperties(savingAccount,savingAccountDto);
-        savingAccountDto.setType(savingAccount.getClass().getSimpleName());
-       savingAccountDto.setCustomerDTO(fromCustomer(savingAccount.getCustomer()));
+        savingAccountDto.setType(savingAccount.getClass().getSimpleName());//!!!! il faut gerer le type!!!!!!!
+        savingAccountDto.setCustomerDTO(fromCustomer(savingAccount.getCustomer()));
         return  savingAccountDto;
     }
 
