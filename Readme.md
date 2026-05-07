@@ -572,7 +572,7 @@ Cette page permet de :
 
 Dans ce projet, nous avons mis en place un système de sécurité basé sur **Spring Security** avec une architecture **stateless** utilisant des **tokens JWT (JSON Web Token)**.
 
-### ⚙Configuration de la sécurité
+### Configuration de la sécurité
 
 La sécurité est configurée à l’aide de `SecurityFilterChain`, qui permet de définir les règles d’accès aux différentes routes de l’application.
 
@@ -617,4 +617,43 @@ Les routes sensibles sont protégées avec des annotations comme :
 Cela signifie que seul un utilisateur ayant le rôle **ADMIN** peut accéder à ces endpoints (ex : suppression d’un client).
 
 ---
+
+## Étape 10 : Intégration Frontend (Angular) + Gestion JWT
+
+Dans cette étape, nous avons développé la partie frontend avec Angular afin de consommer les API REST sécurisées du backend.
+
+### Authentification (Login / Logout)
+
+Une interface de login et logout a été implémentée côté frontend.
+
+L’utilisateur saisit ses identifiants dans la page de connexion.
+Une requête est envoyée vers le backend /auth/login.
+En cas de succès, un JWT est reçu et stocké côté client (ex : localStorage).
+
+Lors du logout :
+
+Le token est supprimé du stockage local
+L’utilisateur est redirigé vers la page de connexion
+###  Gestion du JWT avec Interceptor Angular
+
+Afin de sécuriser les appels HTTP vers le backend, un HTTP Interceptor Angular a été mis en place.
+
+Son rôle principal :
+
+Intercepter chaque requête HTTP
+Ajouter automatiquement le token JWT dans le header :
+Authorization: Bearer <token>
+
+- Cela permet d’éviter de répéter le code d’authentification dans chaque service
+- Toutes les requêtes vers les endpoints sécurisés sont automatiquement authentifiées
+
+###  Sécurisation des routes avec Guards
+
+Pour protéger l’accès aux pages sensibles du frontend, nous avons utilisé des Angular Guards.
+
+Fonctionnalités :
+
+- Vérifier si l’utilisateur est authentifié (présence du JWT)
+- Bloquer l’accès aux routes protégées (ex :  clients)
+- Rediriger vers la page de login si l’utilisateur n’est pas connecté
 
